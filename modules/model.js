@@ -1,3 +1,6 @@
+
+var fileDb = require('./fileDb');
+
 module.exports = {
   User: function(argument) {
     var username = argument.username;

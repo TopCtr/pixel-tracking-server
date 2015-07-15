@@ -27,7 +27,9 @@ var index = function(req, res, next) {
 // sign in
 // GET
 var signIn = function(req, res, next) {
-  if (req.isAuthenticated()) res.redirect('/');
+  if (req.isAuthenticated()) {
+    res.redirect('/');
+  }
   res.render('signin', {
     title: 'Sign In'
   });

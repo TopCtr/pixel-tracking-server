@@ -3,18 +3,19 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var bcrypt = require('bcrypt-nodejs');
 var ejs = require('ejs');
 var path = require('path');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
 
+
 // custom libraries
+var utils = require('./modules/utils');
 // routes
-var route = require('./route');
+var route = require('./modules/route');
 // model
-var Model = require('./model');
+var Model = require('./modules/model');
 
 var app = express();
 
@@ -65,18 +66,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-// See http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
-function genUuid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +  s4() + '-' + s4() + s4() + s4();
-}
 
 
 app.use(session({
   genid: function(req) {
-    return genUuid() // use UUIDs for session IDs
+    return utils.genUuid() // use UUIDs for session IDs
   },
   secret: 'keyboard cat',
   resave: true,
