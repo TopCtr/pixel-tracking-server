@@ -1,0 +1,33 @@
+<% layout('../layout') -%>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-md-offset-4">
+            <h1 class="text-center login-title">Registration Details </h1>
+            <div class="signup-wall">
+                <form action="/register" method="POST" class="form-signin form-horizontal">
+                    <label for="username" class="col-sm-2 control-label">Email</label>
+                    <div class="form-group col-sm-10">
+                        <input type="text" name="username" id="username" placeholder="Email" required="required" autofocus="autofocus" class="form-control"/>
+                    </div>
+                    <label for="password" class="col-sm-2 control-label">Password</label>
+                    <div class="form-group col-sm-10">
+                        <input type="password" name="password" id="password" placeholder="Password" required="required" class="form-control"/>
+                    </div>
+                    <label for="firstName" class="col-sm-2 control-label">First Name</label>
+                    <div class="form-group col-sm-10">
+                        <input type="text" name="firstName" id="firstName" placeholder="First Name" required="required" class="form-control"/>
+                    </div>
+                    <label for="lastName" class="col-sm-2 control-label">First Name</label>
+                    <div class="form-group col-sm-10">
+                        <input type="text" name="lastName" id="lastName" placeholder="Last Name" required="required" class="form-control"/>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-primary btn-block">Register</button><span class="clearfix"></span>
+                </form>
+            </div>
+            <div id="message">
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="stylesheets/register.css">
+<!-- <input type="email" name="email" placeholder="Email" required="required" class="form-control"/> -->

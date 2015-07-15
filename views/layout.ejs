@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title   %></title>
+        <!-- Latest compiled and minified CSS -->
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> -->
+        <!-- Optional theme -->
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.4/darkly/bootstrap.min.css">
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-static-top">
+            <div class="container jj-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">
+                    <span class="glyphicon glyphicon-globe"></span>
+                    </a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <% if (user) { %>
+                    <li class="<%= current == 'home'    ? 'active' : '' %>"><a href="/">Home</a></li>
+                    <li class="<%= current == 'account' ? 'active' : '' %>"><a href="/account">Account</a></li>
+                    <% } else { %>
+                    <li class="<%= current == 'home'  ? 'active' : '' %>"><a href="/">Home</a></li>
+                    <li class="<%= current == 'login' ? 'active' : '' %>"><a href="/login">Log In</a></li>
+                    <% if (current == 'register') { %>
+                    	<li class="active"><a href="/register">Register</a></li>
+                    <% } %>
+                    <% } %>
+                </ul>
+
+                <% if (user) { %>
+                <p class="navbar-text navbar-right">Signed in as <%= user.firstName %> <a href="/logout">Log Out</a></p>
+                <% } %>
+            </div>
+        </nav>
+        <%- body %>
+    </body>
+</html>
