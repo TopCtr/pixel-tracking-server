@@ -1,9 +1,14 @@
 {
-  "name": "passport_mysql_express_auth",
-  "description": "ExpressJs + Passport.js + MySQL Authentication",
-  "version": "1.0.0",
-  "author": "",
-  "main": "app.js",
+  "name": "pixel-tracking-server",
+  "version": "0.0.0",
+  "author": {
+    "name": "Arnon Eilat",
+    "email": "Arnon.Eilat@topctr.com"
+  },
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "bcrypt-nodejs": "*",
     "body-parser": "^1.13.2",
@@ -13,6 +18,13 @@
     "express": "4.x",
     "express-session": "^1.11.3",
     "passport": "*",
-    "passport-local": "*"
+    "passport-local": "*",
+    "morgan": "*",
+    "serve-favicon": "*"
+  },
+  "devDependencies": {
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-jshint": "^0.11.2",
+    "jshint-stylish": "^2.0.1"
   }
 }
