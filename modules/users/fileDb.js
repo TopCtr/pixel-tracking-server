@@ -4,10 +4,10 @@ var debug = require('debug')('fileDb');
 var User = require('./User');
 
 /**
- * @description Micro Database file - very simple storage.
+ * @description Very simple storage - file base database
  * @requires fs
  * @requires User
- * @module modules/users/fileDb
+ * @module modules/fileDb
  */
 
 /**
@@ -63,8 +63,7 @@ module.exports.findById = function(id, fn) {
 /**
  * @description Find user by username
  * @param {string} username - username to find by
- * @param {userCallback} fn - A callback to run.
- * @method
+ * @return {User|null}
  **/
 module.exports.findByUsername = function(username) {
   for (var i = 0; i < data.length; i++) {

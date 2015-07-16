@@ -11,12 +11,10 @@ var User = require('./User');
 
 module.exports.UserFinder = function(username) {
   var user = fileDb.findByUsername(username);
-
   this.then = function(cb) {
     cb(user);
   };
 };
-
 
 
 module.exports.UserAdder = function(user) {

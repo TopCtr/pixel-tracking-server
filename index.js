@@ -17,7 +17,7 @@ var utils = require('./modules/utils');
 // routes
 var route = require('./modules/route');
 // model
-var UserFinder = require('./modules/model').UserFinder;
+var UserFinder = require('./modules/users/model').UserFinder;
 
 var app = express();
 

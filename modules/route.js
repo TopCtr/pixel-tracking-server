@@ -1,7 +1,7 @@
 'use strict';
 var passport = require('passport');
 
-var Model = require('./model');
+var Model = require('./users/model');
 var utils = require('./utils');
 
 // index
@@ -85,7 +85,7 @@ var signUp = function(req, res, next) {
 // POST
 var signUpPost = function(req, res, next) {
   var user = req.body;
-  debugger;
+  // debugger;
   var usernamePromise = new Model.UserFinder(user.username);
 
   return usernamePromise.then(function(model) {
