@@ -13,6 +13,7 @@
     "bcrypt-nodejs": "*",
     "body-parser": "^1.13.2",
     "bookshelf": "0.5",
+    "colors": "^1.1.2",
     "cookie-parser": "*",
     "debug": "^2.2.0",
     "ejs": "*",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-jshint": "^0.11.2",
+    "grunt-jsdoc": "^0.6.7",
     "jshint-stylish": "^2.0.1"
   }
 }
