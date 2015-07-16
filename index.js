@@ -80,6 +80,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+//Sending the pixel
 app.get('/JKSBTUS/:brand/:action/:gclid', function(req, response) {
   var brand = req.params.brand.toLowerCase();
   var action = req.params.action.toLowerCase();
@@ -95,7 +96,7 @@ app.get('/JKSBTUS/:brand/:action/:gclid', function(req, response) {
     return;
   }
 
-  var options = {
+  var pixelOptions = {
     root: __dirname + '/public/images/',
     dotfiles: 'deny',
     headers: {
@@ -103,18 +104,10 @@ app.get('/JKSBTUS/:brand/:action/:gclid', function(req, response) {
       'x-sent': true
     }
   };
+  response.sendFile('p.gif', pixelOptions
+  // ,function(err){if(err){console.log(err);response.status(err.status).end();}else{console.log('Sent: p.gif');}}
+  );
 
-  response.sendFile('p.gif', options, function(err) {
-    if (err) {
-      console.log(err);
-      response.status(err.status).end();
-    } else {
-      console.log('Sent: p.gif');
-    }
-  });
-
-  // response.write('article ' + JSON.stringify(req.params));
-  // response.end();
 });
 
 // GET
