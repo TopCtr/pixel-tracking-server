@@ -1,6 +1,8 @@
 "use strict";
 var fs = require('fs');
 var debug = require('debug')('fileDb');
+var User = require('./User');
+
 /**
  * @description Micro Database file - very simple storage.
  * @requires fs
@@ -64,21 +66,24 @@ module.exports.findById = function(id, fn) {
  * @param {userCallback} fn - A callback to run.
  * @method
  **/
-module.exports.findByUsername = function(username, fn) {
+module.exports.findByUsername = function(username) {
   for (var i = 0; i < data.length; i++) {
     if (data[i].username === username) {
-      return fn(null, data[i]);
+      return new User.User(data[i]);
     }
   }
-  return fn(null, null);
+  return null;
 }
 
 
 
 
 
-module.exports.add = function(obj) {
-  data.push(obj);
+module.exports.add = function(usr) {
+  debugger;
+  if (!(usr instanceof User.User))
+    throw new Error('usr must be instance of User class');
+  data.push(usr.toObject());
   return data.length;
 }
 
@@ -111,6 +116,7 @@ process.on('exit', function() {
   flush();
 });
 
+debugger;
 
 if (fs.existsSync(filePath)) { // Load if the file is there
   debug('Loading ' + filePath);

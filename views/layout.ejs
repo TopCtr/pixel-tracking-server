@@ -17,7 +17,7 @@
                     </a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <% if (user) { %>
+                    <% if (typeof user !== 'undefined') { %>
                     <li class="<%= current == 'home'    ? 'active' : '' %>"><a href="/">Home</a></li>
                     <li class="<%= current == 'account' ? 'active' : '' %>"><a href="/account">Account</a></li>
                     <% } else { %>
@@ -29,7 +29,7 @@
                     <% } %>
                 </ul>
 
-                <% if (user) { %>
+                <% if (typeof user !== 'undefined') { %>
                 <p class="navbar-text navbar-right">Signed in as <%= user.firstName %> <a href="/logout">Log Out</a></p>
                 <% } %>
             </div>

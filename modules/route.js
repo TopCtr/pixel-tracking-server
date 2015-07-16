@@ -2,6 +2,7 @@
 var passport = require('passport');
 var bcrypt = require('bcrypt-nodejs');
 
+
 // custom library
 // model
 var Model = require('./model');
@@ -19,7 +20,8 @@ var index = function(req, res, next) {
     }
     res.render('index', {
       title: 'Home',
-      user: user
+      user: user,
+      current: 'home'
     });
   }
 };
@@ -30,8 +32,9 @@ var signIn = function(req, res, next) {
   if (req.isAuthenticated()) {
     res.redirect('/');
   }
-  res.render('signin', {
-    title: 'Sign In'
+  res.render('users/login', {
+    title: 'Sign In',
+    current: 'login'
   });
 };
 
@@ -40,25 +43,28 @@ var signIn = function(req, res, next) {
 var signInPost = function(req, res, next) {
   passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/signin'
+    failureRedirect: '/login'
   }, function(err, user, info) {
     if (err) {
-      return res.render('signin', {
+      return res.render('users/login', {
         title: 'Sign In',
+        current: 'login',
         errorMessage: err.message
       });
     }
 
     if (!user) {
-      return res.render('signin', {
+      return res.render('users/login', {
         title: 'Sign In',
+        current: 'login',
         errorMessage: info.message
       });
     }
     return req.logIn(user, function(err) {
       if (err) {
-        return res.render('signin', {
+        return res.render('users/login', {
           title: 'Sign In',
+          current: 'login',
           errorMessage: err.message
         });
       } else {
@@ -74,8 +80,9 @@ var signUp = function(req, res, next) {
   if (req.isAuthenticated()) {
     res.redirect('/');
   } else {
-    res.render('signup', {
-      title: 'Sign Up'
+    res.render('users/register', {
+      title: 'Sign Up',
+      current: 'register'
     });
   }
 };
@@ -84,15 +91,15 @@ var signUp = function(req, res, next) {
 // POST
 var signUpPost = function(req, res, next) {
   var user = req.body;
-  var usernamePromise = null;
-  usernamePromise = new Model.User({
-    username: user.username
-  }).fetch();
+  debugger;
+  var usernamePromise = new Model.UserFinder(user.username);
+  //usernamePromise = new Model.User({username: user.username}).fetch();
 
   return usernamePromise.then(function(model) {
     if (model) {
       res.render('signup', {
         title: 'signup',
+        current: 'register',
         errorMessage: 'username already exists'
       });
     } else {
@@ -102,12 +109,13 @@ var signUpPost = function(req, res, next) {
       var password = user.password;
       var hash = bcrypt.hashSync(password);
 
-      var signUpUser = new Model.User({
+      var signUpUser = new Model.UserAdder({
         username: user.username,
-        password: hash
+        password: user.password,
+        firstName: user.firstName,
+        lastName: user.lastName
       });
-
-      signUpUser.save().then(function(model) {
+      signUpUser.then(function(model) {
         // sign in the newly registered user
         signInPost(req, res, next);
       });

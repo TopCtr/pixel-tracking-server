@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var ejs = require('ejs');
+var engine = require('ejs-locals');
 var path = require('path');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -15,23 +16,20 @@ var utils = require('./modules/utils');
 // routes
 var route = require('./modules/route');
 // model
-var Model = require('./modules/model');
+var UserFinder = require('./modules/model').UserFinder;
 
 var app = express();
 
 passport.use(new LocalStrategy(function(username, password, done) {
-  new Model.User({
-    username: username
-  }).then(function(data) {
-    var user = data;
+  console.log('jj  kkk ll');
+
+  new UserFinder(username).then(function(user) {
     if (user === null) {
       return done(null, false, {
         message: 'Invalid username or password'
       });
     } else {
       debugger;
-      // user = data.toJSON();
-      user = data;
       // if (!bcrypt.compareSync(password, user.password)) {
       if (password !== user.password) {
         return done(null, false, {
@@ -49,16 +47,18 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(username, done) {
-  new Model.User({
-    username: username
-  }).then(function(user) {
+  new UserFinder(username).then(function(user) {
     done(null, user);
   });
 });
 
+
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
+app.engine('ejs', engine);
 app.set('view engine', 'ejs');
+
+
 
 app.use(cookieParser());
 var bodyParser = require('body-parser');
@@ -86,15 +86,15 @@ app.get('/', route.index);
 
 // signin
 // GET
-app.get('/signin', route.signIn);
+app.get('/login', route.signIn);
 // POST
-app.post('/signin', route.signInPost);
+app.post('/login', route.signInPost);
 
 // signup
 // GET
-app.get('/signup', route.signUp);
+app.get('/register', route.signUp);
 // POST
-app.post('/signup', route.signUpPost);
+app.post('/register', route.signUpPost);
 
 // logout
 // GET
