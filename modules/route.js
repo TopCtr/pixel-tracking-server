@@ -1,23 +1,17 @@
-// vendor library
+'use strict';
 var passport = require('passport');
-var bcrypt = require('bcrypt-nodejs');
 
-
-// custom library
-// model
 var Model = require('./model');
+var utils = require('./utils');
 
 // index
 var index = function(req, res, next) {
   if (!req.isAuthenticated()) {
-    res.redirect('/signin');
+    res.redirect('/login');
   } else {
-    debugger;
+    // debugger;
     var user = req.user;
 
-    if (user !== undefined) {
-      //  user = user.toJSON();
-    }
     res.render('index', {
       title: 'Home',
       user: user,
@@ -28,7 +22,7 @@ var index = function(req, res, next) {
 
 // sign in
 // GET
-var signIn = function(req, res, next) {
+var logIn = function(req, res, next) {
   if (req.isAuthenticated()) {
     res.redirect('/');
   }
@@ -40,16 +34,16 @@ var signIn = function(req, res, next) {
 
 // sign in
 // POST
-var signInPost = function(req, res, next) {
+var logInPost = function(req, res, next) {
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login'
   }, function(err, user, info) {
-    if (err) {
+    if (err || info) {
       return res.render('users/login', {
         title: 'Sign In',
         current: 'login',
-        errorMessage: err.message
+        errorMessage: (err !== null) ? err.message : info.message
       });
     }
 
@@ -93,43 +87,41 @@ var signUpPost = function(req, res, next) {
   var user = req.body;
   debugger;
   var usernamePromise = new Model.UserFinder(user.username);
-  //usernamePromise = new Model.User({username: user.username}).fetch();
 
   return usernamePromise.then(function(model) {
     if (model) {
       res.render('signup', {
         title: 'signup',
         current: 'register',
-        errorMessage: 'username already exists'
+        errorMessage: 'username already taken'
       });
     } else {
       //****************************************************//
       // MORE VALIDATION GOES HERE(E.G. PASSWORD VALIDATION)
       //****************************************************//
-      var password = user.password;
-      var hash = bcrypt.hashSync(password);
+      var hash = utils.createHash(user.password); // Hash with salt
 
       var signUpUser = new Model.UserAdder({
         username: user.username,
-        password: user.password,
+        password: hash,
         firstName: user.firstName,
         lastName: user.lastName
       });
       signUpUser.then(function(model) {
         // sign in the newly registered user
-        signInPost(req, res, next);
+        logInPost(req, res, next);
       });
     }
   });
 };
 
 // sign out
-var signOut = function(req, res, next) {
+var logOut = function(req, res, next) {
   if (!req.isAuthenticated()) {
     notFound404(req, res, next);
   } else {
     req.logout();
-    res.redirect('/signin');
+    res.redirect('/login');
   }
 };
 
@@ -148,9 +140,9 @@ module.exports.index = index;
 
 // sigin in
 // GET
-module.exports.signIn = signIn;
+module.exports.logIn = logIn;
 // POST
-module.exports.signInPost = signInPost;
+module.exports.logInPost = logInPost;
 
 // sign up
 // GET
@@ -159,7 +151,7 @@ module.exports.signUp = signUp;
 module.exports.signUpPost = signUpPost;
 
 // sign out
-module.exports.signOut = signOut;
+module.exports.logOut = logOut;
 
 // 404 not found
 module.exports.notFound404 = notFound404;

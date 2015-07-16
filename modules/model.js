@@ -1,3 +1,4 @@
+'use strict';
 var fileDb = require('./fileDb');
 var User = require('./User');
 
@@ -6,14 +7,14 @@ module.exports.UserFinder = function(username) {
 
   this.then = function(cb) {
     cb(user);
-  }
+  };
 
   this.toJSON = function() {
     return JSON.stringify({
       username: username,
       password: 'a'
     });
-  }
+  };
 };
 
 
@@ -27,5 +28,5 @@ module.exports.UserAdder = function(user) {
     then: function (cb) {
         cb(u);
     }
-  }
+  };
 };

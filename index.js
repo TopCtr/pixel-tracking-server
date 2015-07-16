@@ -1,14 +1,15 @@
-// vendor libraries
-var express = require('express');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var ejs = require('ejs');
-var engine = require('ejs-locals');
-var path = require('path');
-var passport = require('passport');
+"use strict";
+var express       = require('express');
+var bodyParser    = require('body-parser');
+var cookieParser  = require('cookie-parser');
+var session       = require('express-session');
+var ejs           = require('ejs');
+var engine        = require('ejs-locals');
+var path          = require('path');
+var passport      = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var session = require('express-session');
+var session       = require('express-session');
+var colors        = require('colors');
 
 
 // custom libraries
@@ -21,7 +22,7 @@ var UserFinder = require('./modules/model').UserFinder;
 var app = express();
 
 passport.use(new LocalStrategy(function(username, password, done) {
-  console.log('jj  kkk ll');
+  console.log('LocalStrategy');
 
   new UserFinder(username).then(function(user) {
     if (user === null) {
@@ -29,9 +30,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
         message: 'Invalid username or password'
       });
     } else {
-      debugger;
-      // if (!bcrypt.compareSync(password, user.password)) {
-      if (password !== user.password) {
+      if (!utils.isValidPassword(user, password)) {
         return done(null, false, {
           message: 'Invalid username or password'
         });
@@ -84,11 +83,11 @@ app.use(passport.session());
 // GET
 app.get('/', route.index);
 
-// signin
+// logIn
 // GET
-app.get('/login', route.signIn);
+app.get('/login', route.logIn);
 // POST
-app.post('/login', route.signInPost);
+app.post('/login', route.logInPost);
 
 // signup
 // GET
@@ -98,11 +97,8 @@ app.post('/register', route.signUpPost);
 
 // logout
 // GET
-app.get('/signout', route.signOut);
+app.get('/logout', route.logOut);
 
-/********************************/
-
-/********************************/
 // 404 not found
 app.use(route.notFound404);
 
@@ -110,5 +106,5 @@ var server = app.listen(app.get('port'), function(err) {
   if (err) throw err;
 
   var message = 'Server is running @ http://localhost:' + server.address().port;
-  console.log(message);
+  console.log(message.green);
 });

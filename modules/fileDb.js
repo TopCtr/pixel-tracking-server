@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var fs = require('fs');
 var debug = require('debug')('fileDb');
 var User = require('./User');
@@ -6,6 +6,7 @@ var User = require('./User');
 /**
  * @description Micro Database file - very simple storage.
  * @requires fs
+ * @requires User
  * @module modules/users/fileDb
  */
 
@@ -33,30 +34,29 @@ module.exports.highestId = function() {
     }
   }
   return id;
-}
+};
 
 /**
  * @description Find user by id
  * @param {number} id - id to find by
  * @param {userCallback} fn - A callback to run.
  * @method
+ * @TODO Can I remove it>
  **/
 module.exports.findById = function(id, fn) {
-    // var idx = id - 1; if (users[idx]) {fn(null, users[idx]); } else {fn(new Error('User ' + id + ' does not exist')); }
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].id === id) {
-        return fn(null, data[i]);
-      }
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].id === id) {
+      return fn(null, data[i]);
     }
-    debugger;
-    fn(new Error('User ' + id + ' does not exist'));
   }
-  /**
-   * @description Callback with user object
-   * @callback userCallback
-   * @param {object|null} error - Something other than null means you have an error
-   * @param {object} user - User object
-   */
+  fn(new Error('User ' + id + ' does not exist'));
+};
+/**
+ * @description Callback with user object
+ * @callback userCallback
+ * @param {object|null} error - Something other than null means you have an error
+ * @param {object} user - User object
+ */
 
 
 
@@ -73,26 +73,26 @@ module.exports.findByUsername = function(username) {
     }
   }
   return null;
-}
+};
 
 
 
 
 
 module.exports.add = function(usr) {
-  debugger;
-  if (!(usr instanceof User.User))
+  if (!(usr instanceof User.User)) {
     throw new Error('usr must be instance of User class');
+  }
   data.push(usr.toObject());
   flush();
   return data.length;
-}
+};
 
 module.exports.del = function(num) {
   data.splice(num, 1);
+  flush();
   return data.length;
-}
-
+};
 
 /**
  * @private
@@ -113,7 +113,6 @@ process.on('exit', function() {
   flush();
 });
 
-debugger;
 
 if (fs.existsSync(filePath)) { // Load if the file is there
   console.log('Loading ' + filePath);

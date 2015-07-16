@@ -34,6 +34,6 @@ module.exports.User = function(id, username, password, firstName, lastName) {
       'password': this.password,
       'firstName': this.firstName,
       'lastName': this.lastName
-    }
-  }
-}
+    };
+  };
+};

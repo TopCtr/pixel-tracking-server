@@ -1,9 +1,10 @@
+'use strict';
 module.exports = function(grunt) {
 
   grunt.initConfig({
     clean: {
       build: {
-        src: ["documentation"]
+        src: ['documentation']
       }
     },
     jsdoc: {
@@ -17,7 +18,8 @@ module.exports = function(grunt) {
     jshint: {
       all: ['Gruntfile.js', 'modules/**/*.js'],
       options: {
-        reporter: require('jshint-stylish')
+        reporter: require('jshint-stylish'),
+        jshintrc:true
       }
     }
   });

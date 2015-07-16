@@ -1,4 +1,5 @@
-var bcrypt = require('bcrypt-nodejs');
+'use strict';
+var bCrypt = require('../node_modules/bcrypt-nodejs');
 
 /**
  * @description Generates hash using {@link https://github.com/shaneGirish/bcrypt-nodejs bCrypt}
@@ -7,7 +8,7 @@ var bcrypt = require('bcrypt-nodejs');
  */
 module.exports.createHash = function(password) {
   return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-}
+};
 
 /**
  * @description Compare whether the user's password and encrypted forms are match
@@ -16,8 +17,8 @@ module.exports.createHash = function(password) {
  * @return {boolean}
  */
 module.exports.isValidPassword = function(user, password) {
-  return !bCrypt.compareSync(password, user.password);
-}
+  return bCrypt.compareSync(password, user.password);
+};
 
 
 
@@ -27,4 +28,4 @@ module.exports.genUuid = function() {
     return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
   }
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
+};
