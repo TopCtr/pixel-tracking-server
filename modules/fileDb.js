@@ -84,6 +84,7 @@ module.exports.add = function(usr) {
   if (!(usr instanceof User.User))
     throw new Error('usr must be instance of User class');
   data.push(usr.toObject());
+  flush();
   return data.length;
 }
 
@@ -92,10 +93,6 @@ module.exports.del = function(num) {
   return data.length;
 }
 
-
-module.exports.save = function() {
-  flush();
-}
 
 /**
  * @private
@@ -119,9 +116,11 @@ process.on('exit', function() {
 debugger;
 
 if (fs.existsSync(filePath)) { // Load if the file is there
+  console.log('Loading ' + filePath);
   debug('Loading ' + filePath);
   load();
 } else { // Otherwise, create it.
+  console.log(filePath + ' Not exists - create it');
   debug(filePath + ' Not exists - create it');
   flush();
 }
