@@ -20,9 +20,12 @@ module.exports.isValidPassword = function(user, password) {
   return bCrypt.compareSync(password, user.password);
 };
 
-
-
-// See http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+/**
+ * @description Generate random numbers that look like GUIDs.<br>
+ * GUID is an acronym for 'Globally Unique Identifier' or 'Universally Unique Identifier'
+ * @return {string}
+ * @see http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+ */
 module.exports.genUuid = function() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
