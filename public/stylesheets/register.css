@@ -1,0 +1,14 @@
+html, body {
+  min-height: 100%;
+}
+body{
+  background-image: url('/images/backgrounds/Nighthawks by Edward Hopper.jpg');
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+.col-md-6 {
+  background-color: rgba(0, 0, 0, 0.78);
+  padding-bottom: 20px;
+  border-radius: 6px;
+}

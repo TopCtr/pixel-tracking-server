@@ -20,6 +20,24 @@ var index = function(req, res, next) {
   }
 };
 
+
+
+var account = function(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect('/login');
+  } else {
+    // debugger;
+    var user = req.user;
+
+    res.render('users/account', {
+      title: 'Account',
+      user: user,
+      current: 'account'
+    });
+  }
+};
+
+
 // sign in
 // GET
 var logIn = function(req, res, next) {
@@ -27,7 +45,7 @@ var logIn = function(req, res, next) {
     res.redirect('/');
   }
   res.render('users/login', {
-    title: 'Sign In',
+    title: 'Log In',
     current: 'login'
   });
 };
@@ -41,7 +59,7 @@ var logInPost = function(req, res, next) {
   }, function(err, user, info) {
     if (err || info) {
       return res.render('users/login', {
-        title: 'Sign In',
+        title: 'Log In',
         current: 'login',
         errorMessage: (err !== null) ? err.message : info.message
       });
@@ -49,7 +67,7 @@ var logInPost = function(req, res, next) {
 
     if (!user) {
       return res.render('users/login', {
-        title: 'Sign In',
+        title: 'Log In',
         current: 'login',
         errorMessage: info.message
       });
@@ -57,7 +75,7 @@ var logInPost = function(req, res, next) {
     return req.logIn(user, function(err) {
       if (err) {
         return res.render('users/login', {
-          title: 'Sign In',
+          title: 'Log In',
           current: 'login',
           errorMessage: err.message
         });
@@ -75,7 +93,7 @@ var signUp = function(req, res, next) {
     res.redirect('/');
   } else {
     res.render('users/register', {
-      title: 'Sign Up',
+      title: 'Register',
       current: 'register'
     });
   }
@@ -91,7 +109,7 @@ var signUpPost = function(req, res, next) {
   return usernamePromise.then(function(model) {
     if (model) {
       res.render('signup', {
-        title: 'signup',
+        title: 'Register',
         current: 'register',
         errorMessage: 'username already taken'
       });
@@ -143,6 +161,7 @@ module.exports.index = index;
 module.exports.logIn = logIn;
 // POST
 module.exports.logInPost = logInPost;
+module.exports.account = account;
 
 // sign up
 // GET

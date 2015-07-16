@@ -1,22 +1,19 @@
 "use strict";
-var express       = require('express');
-var bodyParser    = require('body-parser');
-var cookieParser  = require('cookie-parser');
-var session       = require('express-session');
-var ejs           = require('ejs');
-var engine        = require('ejs-locals');
-var path          = require('path');
-var passport      = require('passport');
+var express = require('express');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var ejs = require('ejs');
+var engine = require('ejs-locals');
+var path = require('path');
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var session       = require('express-session');
-var colors        = require('colors');
+var session = require('express-session');
+var colors = require('colors');
 
 
-// custom libraries
 var utils = require('./modules/utils');
-// routes
 var route = require('./modules/route');
-// model
 var UserFinder = require('./modules/users/model').UserFinder;
 
 var app = express();
@@ -57,6 +54,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 
+/** Sets default public directory */
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(cookieParser());
@@ -80,6 +79,44 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+app.get('/JKSBTUS/:brand/:action/:gclid', function(req, response) {
+  var brand = req.params.brand.toLowerCase();
+  var action = req.params.action.toLowerCase();
+  var gclid = req.params.gclid;
+
+
+  if (action !== 'signup' && action !== 'deposit') {
+    response.setHeader('Content-Type', 'text/html');
+    response.writeHead(response.statusCode);
+    response.status(500);
+    response.write('Error - Malformed url');
+    response.end();
+    return;
+  }
+
+  var options = {
+    root: __dirname + '/public/images/',
+    dotfiles: 'deny',
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  };
+
+  response.sendFile('p.gif', options, function(err) {
+    if (err) {
+      console.log(err);
+      response.status(err.status).end();
+    } else {
+      console.log('Sent: p.gif');
+    }
+  });
+
+  // response.write('article ' + JSON.stringify(req.params));
+  // response.end();
+});
+
 // GET
 app.get('/', route.index);
 
@@ -98,12 +135,15 @@ app.post('/register', route.signUpPost);
 // logout
 // GET
 app.get('/logout', route.logOut);
+app.get('/account', route.account);
+
 
 // 404 not found
 app.use(route.notFound404);
 
 var server = app.listen(app.get('port'), function(err) {
-  if (err) throw err;
+  if (err)
+    throw err;
 
   var message = 'Server is running @ http://localhost:' + server.address().port;
   console.log(message.green);
